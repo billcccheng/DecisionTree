@@ -30,8 +30,7 @@ public class Main {
 		
 		EntropyCalculation entropy = new EntropyCalculation();
 		System.out.println(entropy.calculateEntropy_S(dataSet, structureFile));
-		//System.out.println(myEntries.get(0)[myEntries.get(0).length-1]);
-		//System.out.println(structureFile.get(structureFile.size()-1)[2]);
+		System.out.println(entropy.calculateEntropy_A(dataSet, structureFile, 1));
 	}
 }
 

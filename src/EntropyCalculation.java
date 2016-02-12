@@ -18,6 +18,21 @@ public class EntropyCalculation {
 		return totalEntropy;
 	}
 	
+	public double calculateEntropy_A(List<String[]>  dataSet, List<String[]> structureFile, int targetAttribute){
+		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
+		double[] count = new double[numOfClassifier];
+		double[] entropy = new double[numOfClassifier];
+		double total = 0;
+		double totalEntropy = 0;
+
+		count = count(dataSet, structureFile, numOfClassifier);
+		total = sumCount(count, numOfClassifier);
+		entropy = individualAttributeEntropy(count, total, numOfClassifier);
+		totalEntropy = totalAttributeEntropy(entropy, count, total, numOfClassifier);
+		
+		return totalEntropy;
+	}
+	
 	private static double[] count(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier){
 		double[] count = new double[numOfClassifier];
 		for(int i = 0; i < numOfClassifier; i++){
@@ -59,6 +74,16 @@ public class EntropyCalculation {
 		}
 		return totalEntropy;
 	}
+	
+	
+	private static double totalAttributeEntropy(double[] entropy, double[] count, double total, int numOfClassifier){
+		double totalEntropy = 0;
+		for(int i = 0; i < numOfClassifier; i++){
+			totalEntropy += (entropy[i] * count[i] / total);
+		}
+		return totalEntropy;
+	}
+	
 }
 
 
