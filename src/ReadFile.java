@@ -15,6 +15,7 @@ public class ReadFile {
 	public static List<String[]> readParsedInformation(int numberOfAttributes, String fileName) throws IOException{
 		CSVReader reader = new CSVReader(new FileReader(fileName));
 	    List<String[]> myEntries = reader.readAll();
+	    reader.close();
 	    return myEntries;
 	}
 	
@@ -32,7 +33,13 @@ public class ReadFile {
 			fileName = in.nextLine();
 			file = new File(fileName);
 		}
-		
 		return fileName;
+	}
+	
+	public static List<String[]> readStructure() throws IOException{
+		CSVReader reader = new CSVReader(new FileReader("structure.txt"));
+	    List<String[]> structureEntries = reader.readAll();
+	    reader.close();
+	    return structureEntries;
 	}
 }

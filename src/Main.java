@@ -5,14 +5,22 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args){
 		int numberOfAttributes;
-		List<String[]> myEntries = null;
 		String fileName = ReadFile.read();
-		
+		List<String[]> dataSet = null;
+		List<String[]> structureFile = null;
 		Scanner in = new Scanner(System.in);
 		System.out.print("Number of attributes:");
 		numberOfAttributes = in.nextInt();
+		
 		try {
-			myEntries = ReadFile.readParsedInformation(numberOfAttributes, fileName);
+			structureFile = ReadFile.readStructure();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			dataSet = ReadFile.readParsedInformation(numberOfAttributes, fileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally{
@@ -20,6 +28,10 @@ public class Main {
 		}
 		
 		
+		EntropyCalculation entropy = new EntropyCalculation();
+		System.out.println(entropy.calculateEntropy_S(dataSet, structureFile));
+		//System.out.println(myEntries.get(0)[myEntries.get(0).length-1]);
+		//System.out.println(structureFile.get(structureFile.size()-1)[2]);
 	}
 }
 

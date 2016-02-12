@@ -1,7 +1,8 @@
-buying, v-high, high, med, low
-maint, v-high, high, med, low
-doors, 2, 3, 4, 5-more
-persons, 2, 4, more
-lug_boot, small, med, big
-safety, low, med, high
-class, unacc, acc, good, v-good	
+buying,maint,doors,persons,lug_boot,safety,class
+v-high,high,med,low
+v-high,high,med,low
+2,3,4,5-more
+2,4,more
+small,med,big
+low,med,high
+unacc,acc,good,vgood
