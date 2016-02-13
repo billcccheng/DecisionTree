@@ -1,6 +1,6 @@
 buying,maint,doors,persons,lug_boot,safety,class
-v-high,high,med,low
-v-high,high,med,low
+vhigh,high,med,low
+vhigh,high,med,low
 2,3,4,5-more
 2,4,more
 small,med,big
