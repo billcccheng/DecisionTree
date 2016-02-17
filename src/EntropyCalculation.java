@@ -6,30 +6,34 @@ public class EntropyCalculation {
 	public double calculateEntropy_S(List<String[]>  dataSet, List<String[]> structureFile){
 		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
 		double[] count = new double[numOfClassifier];
-		double[] entropy = new double[numOfClassifier];
+		double[] entropy_S = new double[numOfClassifier];
 		double total = 0;
 		double totalEntropy = 0;
 
 		count = count(dataSet, structureFile, numOfClassifier);
-		total = sumCount(count, numOfClassifier);
-		entropy = individualAttributeEntropy(count, total, numOfClassifier);
-		totalEntropy = totalEntropy(entropy, numOfClassifier);
+		total = sumCount_S(count, numOfClassifier);
+		entropy_S = entropyS(count, total, numOfClassifier);
+		totalEntropy = totalEntropy(entropy_S, numOfClassifier);
 		
 		return totalEntropy;
 	}
 	
-	public double calculateEntropy_A(List<String[]>  dataSet, List<String[]> structureFile, int targetAttribute){
+	public double calculateAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeIndex){
 		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
-		double[] count = new double[numOfClassifier];
-		double[] entropy = new double[numOfClassifier];
+		String[] attributes = structureFile.get(attributeIndex);
+		double[][] count = new double[attributes.length][numOfClassifier];
+		double[] entropy_A = new double[attributes.length];
 		double total = 0;
 		double totalEntropy = 0;
 
-		count = count(dataSet, structureFile, numOfClassifier);
-		total = sumCount(count, numOfClassifier);
-		entropy = individualAttributeEntropy(count, total, numOfClassifier);
-		totalEntropy = totalAttributeEntropy(entropy, count, total, numOfClassifier);
-		
+		count = countAttributes(dataSet, structureFile, numOfClassifier, attributes, attributeIndex);
+		total = sumCount_A(count, numOfClassifier);
+		entropy_A = entropyA(count, total, numOfClassifier);
+		totalEntropy = totalEntropy(entropy_A, count.length);
+//		for(int i = 0; i < count.length; i++)
+//			for(int j = 0; j < count[0].length; j++ )
+//				System.out.println(attributes[i]+" "+count[i][j]);
+			
 		return totalEntropy;
 	}
 	
@@ -45,45 +49,82 @@ public class EntropyCalculation {
 		return count;
 	}
 	
-	private static double sumCount(double[] count, int numOfClassifier){
+	private static double[][] countAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeIndex){
+		double[][] count = new double[attributes.length][numOfClassifier];
+		for(int i = 0; i < dataSet.size(); i++){
+			for(int j = 0; j < attributes.length; j++){
+				for(int k = 0; k < numOfClassifier; k++){
+					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
+							&& dataSet.get(i)[attributeIndex - 1].equals(attributes[j])){ // Wind = Weak/Strong dataSet.get(j)[0]<-change the 0 to a variable
+						count[j][k]++;
+					}
+				}
+			}
+		}
+
+		return count;
+	}
+	
+	private static double sumCount_S(double[] count, int numOfClassifier){
 		double total = 0;
 		for(int i = 0; i < numOfClassifier; i++){
 			total += count[i];
 		}
 		return total;
-	} 
+	}
 	
-	private static double[] individualAttributeEntropy(double[] count, double total, int numOfClassifier){
+	private static double sumCount_A(double[][] count, int numOfClassifier){
+		double total = 0;
+		for(int i = 0; i < count.length; i++){
+			for(int j = 0; j < numOfClassifier; j++){
+				total += count[i][j];
+			}
+		}
+		return total;
+	}
+	
+	
+	private static double[] entropyS(double[] count, double total, int numOfClassifier){
 		double[] entropy = new double[numOfClassifier];
+		
 		for(int i = 0; i < numOfClassifier; i++){
 			entropy[i] = entropy(count[i]/total);
 		}
 		return entropy;
 	}
 	
-	private static double entropy(double x){
-		double answer = -Math.log(x)/Math.log(2);
-		answer *= x;
+	private static double[] entropyA(double[][] count, double total, int numOfClassifier){
+		double[] entropy = new double[count.length];
+		double[] totalAttribute = new double[count.length];
+		
+		for(int i = 0; i < count.length; i++){
+			for(int j = 0; j < numOfClassifier; j++){
+				totalAttribute[i] += count[i][j];
+			}
+		}
+		
+		for(int i = 0; i < count.length; i++){
+			for(int j = 0; j < numOfClassifier; j++){
+				entropy[i] += (totalAttribute[i]/total)*(entropy(count[i][j]/totalAttribute[i]));
+			}
+		}
+		return entropy;
+	}
+	
+	private static double entropy(double probability){
+		if(probability == 0)
+			return 0;
+		double answer = -probability*(Math.log(probability)/Math.log(2));
 		return answer;
 	}
 	
-	private static double totalEntropy(double[] entropy, int numOfClassifier){
+	private static double totalEntropy(double[] entropy, int attributeLength){
 		double totalEntropy = 0;
-		for(int i = 0; i < numOfClassifier; i++){
+		for(int i = 0; i < attributeLength; i++){
 			totalEntropy += entropy[i];
 		}
 		return totalEntropy;
 	}
-	
-	
-	private static double totalAttributeEntropy(double[] entropy, double[] count, double total, int numOfClassifier){
-		double totalEntropy = 0;
-		for(int i = 0; i < numOfClassifier; i++){
-			totalEntropy += (entropy[i] * count[i] / total);
-		}
-		return totalEntropy;
-	}
-	
 }
 
 

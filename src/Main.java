@@ -8,9 +8,10 @@ public class Main {
 		String fileName = ReadFile.read();
 		List<String[]> dataSet = null;
 		List<String[]> structureFile = null;
+		
 		Scanner in = new Scanner(System.in);
-		System.out.print("Number of attributes:");
-		numberOfAttributes = in.nextInt();
+		//System.out.print("Number of attributes:");
+		numberOfAttributes = 6;//in.nextInt();
 		
 		try {
 			structureFile = ReadFile.readStructure();
@@ -29,8 +30,17 @@ public class Main {
 		
 		
 		EntropyCalculation entropy = new EntropyCalculation();
-		System.out.println(entropy.calculateEntropy_S(dataSet, structureFile));
-		System.out.println(entropy.calculateEntropy_A(dataSet, structureFile, 1));
+		double S = entropy.calculateEntropy_S(dataSet, structureFile);
+		double[] attributeEntropy = new double[structureFile.get(0).length - 1];
+		for(int attributeIndex = 0; attributeIndex < structureFile.get(0).length - 1; attributeIndex++) // Outlook, Temperature, Humidity, Wind,...
+			attributeEntropy[attributeIndex] = entropy.calculateAttributeEntropy(dataSet, structureFile, attributeIndex + 1); 
+		int a = 0;
+		for(double i : attributeEntropy){
+			double x = S - i;
+			System.out.println(structureFile.get(0)[a++]+" " +S +" - "+ i + " = " + x);
+		}
+		
+		
 	}
 }
 

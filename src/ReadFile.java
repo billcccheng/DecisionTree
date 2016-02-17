@@ -23,16 +23,16 @@ public class ReadFile {
 		String fileName;
 		File file = new File("");
 		
-		Scanner in = new Scanner(System.in);
-		System.out.print("File Name:");
-		fileName = in.nextLine();
+		//Scanner in = new Scanner(System.in);
+		//System.out.print("File Name:");
+		fileName = "car.txt";//in.nextLine();
 		file = new File(fileName);
 		
-		while(!file.exists()){
-			System.out.print("Wrong file name! File Name:");
-			fileName = in.nextLine();
-			file = new File(fileName);
-		}
+//		while(!file.exists()){
+//			System.out.print("Wrong file name! File Name:");
+//			fileName = in.nextLine();
+//			file = new File(fileName);
+//		}
 		return fileName;
 	}
 	
