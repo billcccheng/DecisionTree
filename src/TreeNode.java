@@ -3,24 +3,16 @@ import java.util.ArrayList;
 
 public class TreeNode{
     List<TreeNode> children = null;
-    private String value;
+    String value;
 
     public TreeNode(String value){
         this.children = new ArrayList<TreeNode>();
-        this.setValue(value);
+        this.value = value;
     }
 
     public void addChild(TreeNode child){
         children.add(child);
     }
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 
 }
 

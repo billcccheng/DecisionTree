@@ -18,25 +18,6 @@ public class EntropyCalculation {
 		return totalEntropy;
 	}
 	
-	public double calculateAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeIndex){
-		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
-		String[] attributes = structureFile.get(attributeIndex);
-		double[][] count = new double[attributes.length][numOfClassifier];
-		double[] entropy_A = new double[attributes.length];
-		double total = 0;
-		double totalEntropy = 0;
-
-		count = countAttributes(dataSet, structureFile, numOfClassifier, attributes, attributeIndex);
-		total = sumCount_A(count, numOfClassifier);
-		entropy_A = entropyA(count, total, numOfClassifier);
-		totalEntropy = totalEntropy(entropy_A, count.length);
-//		for(int i = 0; i < count.length; i++)
-//			for(int j = 0; j < count[0].length; j++ )
-//				System.out.println(attributes[i]+" "+count[i][j]);
-			
-		return totalEntropy;
-	}
-	
 	private static double[] count(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier){
 		double[] count = new double[numOfClassifier];
 		for(int i = 0; i < numOfClassifier; i++){
@@ -49,36 +30,10 @@ public class EntropyCalculation {
 		return count;
 	}
 	
-	private static double[][] countAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeIndex){
-		double[][] count = new double[attributes.length][numOfClassifier];
-		for(int i = 0; i < dataSet.size(); i++){
-			for(int j = 0; j < attributes.length; j++){
-				for(int k = 0; k < numOfClassifier; k++){
-					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
-							&& dataSet.get(i)[attributeIndex - 1].equals(attributes[j])){ // Wind = Weak/Strong dataSet.get(j)[0]<-change the 0 to a variable
-						count[j][k]++;
-					}
-				}
-			}
-		}
-
-		return count;
-	}
-	
 	private static double sumCount_S(double[] count, int numOfClassifier){
 		double total = 0;
 		for(int i = 0; i < numOfClassifier; i++){
 			total += count[i];
-		}
-		return total;
-	}
-	
-	private static double sumCount_A(double[][] count, int numOfClassifier){
-		double total = 0;
-		for(int i = 0; i < count.length; i++){
-			for(int j = 0; j < numOfClassifier; j++){
-				total += count[i][j];
-			}
 		}
 		return total;
 	}
@@ -91,6 +46,51 @@ public class EntropyCalculation {
 			entropy[i] = entropy(count[i]/total);
 		}
 		return entropy;
+	}
+	
+	public double calculateAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow){
+		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
+		String[] attributes = structureFile.get(attributeRow + 1);
+		double[][] count = new double[attributes.length][numOfClassifier];
+		double[] entropy_A = new double[attributes.length];
+		double total = 0;
+		double totalEntropy = 0;
+
+		count = countAttributes(dataSet, structureFile, numOfClassifier, attributes, attributeRow);
+		total = sumCount_A(count, numOfClassifier);
+		entropy_A = entropyA(count, total, numOfClassifier);
+		totalEntropy = totalEntropy(entropy_A, count.length);
+//		for(int i = 0; i < count.length; i++)
+//			for(int j = 0; j < count[0].length; j++ )
+//				System.out.println(attributes[i]+" "+count[i][j]);
+			
+		return totalEntropy;
+	}
+	
+	private static double[][] countAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeRow){
+		double[][] count = new double[attributes.length][numOfClassifier];
+		for(int i = 0; i < dataSet.size(); i++){
+			for(int j = 0; j < attributes.length; j++){
+				for(int k = 0; k < numOfClassifier; k++){
+					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
+							&& dataSet.get(i)[attributeRow].equals(attributes[j])){ // Wind = Weak/Strong 
+						count[j][k]++;
+					}
+				}
+			}
+		}
+
+		return count;
+	}
+	
+	private static double sumCount_A(double[][] count, int numOfClassifier){
+		double total = 0;
+		for(int i = 0; i < count.length; i++){
+			for(int j = 0; j < numOfClassifier; j++){
+				total += count[i][j];
+			}
+		}
+		return total;
 	}
 	
 	private static double[] entropyA(double[][] count, double total, int numOfClassifier){
@@ -110,6 +110,47 @@ public class EntropyCalculation {
 		}
 		return entropy;
 	}
+	
+	public double calculateSubAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow, int targetAttributeIndex, int highestGainAttributeRow){
+		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
+		String leafNode = structureFile.get(highestGainAttributeRow + 1)[targetAttributeIndex]; // sunny overcast rainy
+		String[] attributes = structureFile.get(attributeRow + 1);
+		double[][] count = new double[attributes.length][numOfClassifier];
+		double[] entropy_A = new double[attributes.length];
+		double total = 0;
+		double totalEntropy = 0;
+		
+		//System.out.println(leafNode);
+		count = countSubAttributes(dataSet, structureFile, numOfClassifier, attributes, attributeRow, leafNode, highestGainAttributeRow);
+		
+		total = sumCount_A(count, numOfClassifier);
+		entropy_A = entropyA(count, total, numOfClassifier);
+		totalEntropy = totalEntropy(entropy_A, count.length);
+//		for(int i = 0; i < count.length; i++)
+//			for(int j = 0; j < count[0].length; j++ )
+//				System.out.println(attributes[i]+" "+count[i][j]);
+			
+		return totalEntropy;
+	}
+	
+	
+	private static double[][] countSubAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeRow, String leafNode, int highestGainAttributeRow){
+		double[][] count = new double[attributes.length][numOfClassifier];
+		for(int i = 0; i < dataSet.size(); i++){
+			for(int j = 0; j < attributes.length; j++){  //attributes = sunny,overcast,rainy  attributes = structureFile.get(attributeRow);
+				for(int k = 0; k < numOfClassifier; k++){
+					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
+							&& dataSet.get(i)[attributeRow].equals(attributes[j]) && (dataSet.get(i)[highestGainAttributeRow].equals(leafNode))){ // Wind = Weak/Strong
+						count[j][k]++;
+
+					}
+				}
+			}
+		}
+
+		return count;
+	}
+	
 	
 	private static double entropy(double probability){
 		if(probability == 0)

@@ -25,7 +25,7 @@ public class ReadFile {
 		
 		//Scanner in = new Scanner(System.in);
 		//System.out.print("File Name:");
-		fileName = "car.txt";//in.nextLine();
+		fileName = "tennis.txt";//in.nextLine();
 		file = new File(fileName);
 		
 //		while(!file.exists()){
@@ -37,7 +37,7 @@ public class ReadFile {
 	}
 	
 	public static List<String[]> readStructure() throws IOException{
-		CSVReader reader = new CSVReader(new FileReader("structure.txt"));
+		CSVReader reader = new CSVReader(new FileReader("structuretennis.txt"));
 	    List<String[]> structureEntries = reader.readAll();
 	    reader.close();
 	    return structureEntries;
