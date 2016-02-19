@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -17,10 +18,19 @@ public class Main {
 		
 //		System.out.println(InformationGain.highestGain(S, attributeEntropy));
 //		TreeNode root = new TreeNode(structureFile.get(0)[InformationGain.highestGain(1, attributeEntropy)]);
-//		TreeNode root = new TreeNode(InformationGain.highestGain(1, attributeEntropy));
-//		System.out.println(root.attributeIndex);
+		TreeNode root = new TreeNode(InformationGain.highestGain(attributeEntropy));
+		System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy)]);
 		
 		int highestGainAttributeRow = InformationGain.highestGain(attributeEntropy); //outlook
+		for(int i = 0; i < structureFile.get(0).length - 1; i ++){
+			ArrayList<Integer> rootArrayList = new ArrayList<Integer>();
+			traverse(structureFile, dataSet, highestGainAttributeRow, root);
+		}
+	}
+	
+	public static void traverse(List<String[]> structureFile, List<String[]> dataSet, int highestGainAttributeRow, TreeNode root){
+		EntropyCalculation entropy = new EntropyCalculation();
+		double[] attributeEntropy = new double[structureFile.get(0).length - 1];
 		for(int targetAttributeIndex = 0; targetAttributeIndex < structureFile.get(highestGainAttributeRow + 1).length; targetAttributeIndex++){ //leafnode sunny overcast rainy
 			System.out.println(structureFile.get(highestGainAttributeRow + 1)[targetAttributeIndex] + ":");
 			for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1  ; attributeRow++){ // Outlook, Temperature, Humidity, Wind,...structureFile.get(0).length - 1
@@ -31,8 +41,8 @@ public class Main {
 				
 				System.out.println(structureFile.get(0)[attributeRow]+" "+attributeEntropy[attributeRow]);
 			}
-			System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy) - 1] + "\n");
-			
+			System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy)] + "\n");
+			root.addChild(new TreeNode(InformationGain.highestGain(attributeEntropy)));	
 		}
 	}
 }
