@@ -3,11 +3,11 @@ import java.util.ArrayList;
 
 public class TreeNode{
     List<TreeNode> children = null;
-    String value;
+    int attributeIndex;
 
-    public TreeNode(String value){
+    public TreeNode(int attributeIndex){
         this.children = new ArrayList<TreeNode>();
-        this.value = value;
+        this.attributeIndex = attributeIndex;
     }
 
     public void addChild(TreeNode child){

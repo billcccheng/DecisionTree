@@ -1,36 +1,14 @@
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args){
-		int numberOfAttributes;
-		String fileName = ReadFile.read();
-		List<String[]> dataSet = null;
-		List<String[]> structureFile = null;
-		
-		Scanner in = new Scanner(System.in);
-		//System.out.print("Number of attributes:");
-		numberOfAttributes = 6;//in.nextInt();
-		
-		try {
-			structureFile = ReadFile.readStructure();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		try {
-			dataSet = ReadFile.readParsedInformation(numberOfAttributes, fileName);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally{
-			in.close();
-		}
+	public static void main(String[] args) throws IOException{
+		List<String[]> structureFile = ReadFile.readStructure();
+		List<String[]> dataSet = ReadFile.readData();
 		
 		
 		EntropyCalculation entropy = new EntropyCalculation();
-		double S = entropy.calculateEntropy_S(dataSet, structureFile);
+		//double S = entropy.calculateEntropy_S(dataSet, structureFile);
 		double[] attributeEntropy = new double[structureFile.get(0).length - 1];
 		for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1; attributeRow++) // Outlook, Temperature, Humidity, Wind,...
 			attributeEntropy[attributeRow] = entropy.calculateAttributeEntropy(dataSet, structureFile, attributeRow); 
@@ -38,20 +16,23 @@ public class Main {
 
 		
 //		System.out.println(InformationGain.highestGain(S, attributeEntropy));
-//		TreeNode root = new TreeNode(structureFile.get(0)[InformationGain.highestGain(S, attributeEntropy)]);
-//		System.out.println(root.value);
+//		TreeNode root = new TreeNode(structureFile.get(0)[InformationGain.highestGain(1, attributeEntropy)]);
+//		TreeNode root = new TreeNode(InformationGain.highestGain(1, attributeEntropy));
+//		System.out.println(root.attributeIndex);
 		
-		int highestGainAttributeRow = InformationGain.highestGain(S, attributeEntropy); //outlook
+		int highestGainAttributeRow = InformationGain.highestGain(attributeEntropy); //outlook
 		for(int targetAttributeIndex = 0; targetAttributeIndex < structureFile.get(highestGainAttributeRow + 1).length; targetAttributeIndex++){ //leafnode sunny overcast rainy
 			System.out.println(structureFile.get(highestGainAttributeRow + 1)[targetAttributeIndex] + ":");
-			for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1; attributeRow++){ // Outlook, Temperature, Humidity, Wind,...
+			for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1  ; attributeRow++){ // Outlook, Temperature, Humidity, Wind,...structureFile.get(0).length - 1
 				if(attributeRow != highestGainAttributeRow)
 					attributeEntropy[attributeRow] = entropy.calculateSubAttributeEntropy(dataSet, structureFile, attributeRow, targetAttributeIndex, highestGainAttributeRow);
 				else
 					attributeEntropy[attributeRow] = Double.MAX_VALUE; //outlook
+				
 				System.out.println(structureFile.get(0)[attributeRow]+" "+attributeEntropy[attributeRow]);
 			}
-			System.out.println();
+			System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy) - 1] + "\n");
+			
 		}
 	}
 }

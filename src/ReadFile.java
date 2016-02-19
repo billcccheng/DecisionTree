@@ -12,32 +12,16 @@ public class ReadFile {
 		System.out.println("ReadFile");
 	}
 	
-	public static List<String[]> readParsedInformation(int numberOfAttributes, String fileName) throws IOException{
-		CSVReader reader = new CSVReader(new FileReader(fileName));
+	public static List<String[]> readData() throws IOException{
+		CSVReader reader = new CSVReader(new FileReader("data.txt"));
 	    List<String[]> myEntries = reader.readAll();
 	    reader.close();
 	    return myEntries;
 	}
 	
-	public static String read(){
-		String fileName;
-		File file = new File("");
-		
-		//Scanner in = new Scanner(System.in);
-		//System.out.print("File Name:");
-		fileName = "tennis.txt";//in.nextLine();
-		file = new File(fileName);
-		
-//		while(!file.exists()){
-//			System.out.print("Wrong file name! File Name:");
-//			fileName = in.nextLine();
-//			file = new File(fileName);
-//		}
-		return fileName;
-	}
 	
 	public static List<String[]> readStructure() throws IOException{
-		CSVReader reader = new CSVReader(new FileReader("structuretennis.txt"));
+		CSVReader reader = new CSVReader(new FileReader("structure.txt"));
 	    List<String[]> structureEntries = reader.readAll();
 	    reader.close();
 	    return structureEntries;
