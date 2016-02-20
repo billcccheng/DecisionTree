@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -116,17 +118,16 @@ public class EntropyCalculation {
 		return entropy;
 	}
 	
-	public double calculateSubAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow, int targetAttributeIndex, int highestGainAttributeRow){
+	public double calculateSubAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow, int targetAttributeIndex, int highestGainAttributeRow, TreeNode root){
 		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
 		String leafNode = structureFile.get(highestGainAttributeRow + 1)[targetAttributeIndex]; // sunny overcast rainy
 		String[] attributes = structureFile.get(attributeRow + 1); //hot, mild, cool
 		double[][] countAttributesWithClassifier = new double[attributes.length][numOfClassifier];
 		double[] entropy_A = new double[attributes.length];
-		double[] total = new double[numOfClassifier * attributes.length];
 		double totalEntropy = 0;
 		
-		//System.out.println(attributes[2]);
-		countAttributesWithClassifier = countSubAttributes(dataSet, structureFile, numOfClassifier, attributes, attributeRow, leafNode, highestGainAttributeRow);
+		//System.out.println(leafNode);
+		countAttributesWithClassifier = countSubAttributes(dataSet, structureFile, numOfClassifier, attributes, attributeRow, leafNode, highestGainAttributeRow, targetAttributeIndex, root);
 		
 		//double totalOfAttribute = sumCount_SubA(total, countAttributesWithClassifier, numOfClassifier, structureFile.get(highestGainAttributeRow).length);
 		entropy_A = entropySubA(countAttributesWithClassifier, numOfClassifier);
@@ -145,15 +146,29 @@ public class EntropyCalculation {
 	}
 	
 	
-	private static double[][] countSubAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeRow, String leafNode, int highestGainAttributeRow){
+	private static double[][] countSubAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeRow, String leafNode, int highestGainAttributeRow, int targetAttributeIndex, TreeNode root){
 		double[][] countAttributesWithClassifier = new double[attributes.length][numOfClassifier];
 		for(int i = 0; i < dataSet.size(); i++){
 			for(int j = 0; j < attributes.length; j++){  //attributes = sunny,overcast,rainy  attributes = structureFile.get(attributeRow);
 				for(int k = 0; k < numOfClassifier; k++){
 					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
 							&& dataSet.get(i)[attributeRow].equals(attributes[j]) && (dataSet.get(i)[highestGainAttributeRow].equals(leafNode))){ // Wind = Weak/Strong
-						countAttributesWithClassifier[j][k]++;
-
+						boolean equals = true;
+						if(!root.attributeToBeCompared.isEmpty()){
+							for(int l = 0; l < root.attributeToBeCompared.size(); l++){
+								if(dataSet.get(i)[root.attributeIndex].equals(root.attributeToBeCompared.get(l))){
+									//System.out.println(dataSet.get(i)[root.attributeIndex] +"=="+root.attributeToBeCompared.get(l) + " = " + "TRUE");
+									equals = true;
+								}else{
+									//System.out.println(dataSet.get(i)[root.attributeIndex] +"=="+root.attributeToBeCompared.get(l) + " = " + "FALSE");
+									equals = false;
+								}
+							}
+							if(equals)
+								countAttributesWithClassifier[j][k]++;
+						}else{
+							countAttributesWithClassifier[j][k]++;
+						}
 					}
 				}
 			}
