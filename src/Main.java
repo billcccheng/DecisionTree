@@ -49,7 +49,7 @@ public class Main {
 				System.out.println(structureFile.get(0)[attributeRow]+" "+attributeEntropy[attributeRow]);
 			}
 			
-			if(InformationGain.highestGain(attributeEntropy) == -1)
+			if(InformationGain.highestGain(attributeEntropy) == -2)
 				System.out.println("Yes/No" + "\n");
 			else
 				System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy)] + root.attributeIndex + "\n");
@@ -60,9 +60,11 @@ public class Main {
 			
 			int informationGain = InformationGain.highestGain(attributeEntropy);
 			List<Integer> currentAttributeIndex = new ArrayList<Integer>();
-			if(InformationGain.highestGain(attributeEntropy) == -1){
+			if(InformationGain.highestGain(attributeEntropy) == -2){
+				//System.out.println(informationGain);
 				currentAttributeIndex.addAll(root.attributeIndex);
 				currentAttributeIndex.add(informationGain);
+				//System.out.println(currentAttributeIndex);
 				root.addChild(new TreeNode(currentAttributeIndex, currentAttributesToBeCompared, "Yes/No"));
 				//System.out.println(currentAttributesToBeCompared);
 			}else{
@@ -75,7 +77,7 @@ public class Main {
 //		System.out.println(root.attributeName);
 		for(int i = 0; i < root.children.size(); i++){
 			TreeNode currentNode = root.children.get(i);
-			if(currentNode.attributeIndex.get(currentNode.attributeIndex.size()-1) != -1){
+			if(currentNode.attributeIndex.get(currentNode.attributeIndex.size()-1) != -2){
 				buildTree(structureFile, dataSet, currentNode.attributeIndex.get(currentNode.attributeIndex.size()-1), currentNode, entropy);
 			}
 		}			

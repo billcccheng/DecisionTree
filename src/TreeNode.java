@@ -22,9 +22,14 @@ public class TreeNode{
     	if(root == null)
     		return;
     	System.out.println("-------------");
-    	for(int i : root.attributeIndex)
-    		System.out.print(structureFile.get(0)[i] + ", ");
-    	//for(int i = 0; i < dataSet.size())
+    	for(int i : root.attributeIndex){
+    		if(i != -2)
+    			System.out.print(structureFile.get(0)[i] + ",");
+    	}
+//    	System.out.println(root.attributeIndex);
+//    	for(int i = 0; i < dataSet.size(); i++){
+//    		
+//    	}
     	System.out.println(root.attributeToBeCompared);
 
     	
