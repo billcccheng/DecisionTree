@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,7 +157,7 @@ public class EntropyCalculation {
 						boolean equals = true;
 						if(!root.attributeToBeCompared.isEmpty()){
 							for(int l = 0; l < root.attributeToBeCompared.size(); l++){
-								if(dataSet.get(i)[root.attributeIndex].equals(root.attributeToBeCompared.get(l))){
+								if(Arrays.asList(dataSet.get(i)).contains(root.attributeToBeCompared.get(l))){
 									//System.out.println(dataSet.get(i)[root.attributeIndex] +"=="+root.attributeToBeCompared.get(l) + " = " + "TRUE");
 									equals = true;
 								}else{
@@ -255,22 +256,3 @@ public class EntropyCalculation {
 		return totalEntropy;
 	}
 }
-
-
-//double i = 0, j = 0, k = 0, l = 0;
-//for(int a = 0; a < entries.size(); a++){
-//	if(entries.get(a)[6].equals("unacc")){
-//		i++;
-//		//System.out.println(entries.get(i)[6]);
-//	}else if(entries.get(a)[6].equals("acc")){
-//		j++;
-//	}else if(entries.get(a)[6].equals("good")){
-//		k++;
-//	}else{
-//		l++;
-//	}
-//}
-////System.out.println(i +" "+ j +" "+ k + " " + l);
-////System.out.println(Math.log10(0.7));
-//double entropy = -(i/(i+j+k+l))*Math.log10(i/(i+j+k+l));;
-//return entropy;
