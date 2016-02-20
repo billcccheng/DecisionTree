@@ -1,6 +1,4 @@
 import java.util.List;
-import java.util.Scanner;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 

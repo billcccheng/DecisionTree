@@ -1,56 +1,9 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class EntropyCalculation {
 	int numOfClassifier;
-//	public double calculateEntropy_S(List<String[]>  dataSet, List<String[]> structureFile){
-//		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
-//		double[] countAttributesWithClassifier = new double[numOfClassifier];
-//		double[] entropy_S = new double[numOfClassifier];
-//		double total = 0;
-//		double totalEntropy = 0;
-//
-//		countAttributesWithClassifier = count(dataSet, structureFile, numOfClassifier);
-//		total = sumCount_S(countAttributesWithClassifier, numOfClassifier);
-//		entropy_S = entropyS(countAttributesWithClassifier, total, numOfClassifier);
-//		totalEntropy = totalEntropy(entropy_S, numOfClassifier);
-//		
-//		return totalEntropy;
-//	}
-//	
-//	private static double[] count(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier){
-//		double[] count = new double[numOfClassifier];
-//		for(int i = 0; i < numOfClassifier; i++){
-//			for(int j = 0; j < dataSet.size(); j++){
-//				if(dataSet.get(j)[dataSet.get(j).length - 1].equals(structureFile.get(structureFile.size()-1)[i])){
-//					count[i]++;
-//				}
-//			}
-//		}
-//		return count;
-//	}
-//	
-//	private static double sumCount_S(double[] countAttributesWithClassifier, int numOfClassifier){
-//		double total = 0;
-//		for(int i = 0; i < numOfClassifier; i++){
-//			total += countAttributesWithClassifier[i];
-//		}
-//		return total;
-//	}
-//	
-//	
-//	private static double[] entropyS(double[] countAttributesWithClassifier, double total, int numOfClassifier){
-//		double[] entropy = new double[numOfClassifier];
-//		
-//		for(int i = 0; i < numOfClassifier; i++){
-//			entropy[i] = entropy(countAttributesWithClassifier[i]/total);
-//		}
-//		return entropy;
-//	}
-	
 	public double calculateAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow){
 		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
 		String[] attributes = structureFile.get(attributeRow + 1);
