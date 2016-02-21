@@ -15,9 +15,10 @@ public class Main {
 			attributeEntropy[attributeRow] = entropy.calculateAttributeEntropy(dataSet, structureFile, attributeRow); 
 		
 		List<Integer> attributeIndexList = new ArrayList<Integer>();
+		List<String> attributeIndexName = new ArrayList<String>();
 		attributeIndexList.add(InformationGain.highestGain(attributeEntropy)); 
-		
-		TreeNode root = new TreeNode(attributeIndexList, new ArrayList<String>(),structureFile.get(0)[InformationGain.highestGain(attributeEntropy)]);
+		attributeIndexName.add(structureFile.get(0)[InformationGain.highestGain(attributeEntropy)]);
+		TreeNode root = new TreeNode(attributeIndexList, attributeIndexName,new ArrayList<String>(),structureFile.get(0)[InformationGain.highestGain(attributeEntropy)]);
 		int highestGainAttributeRow = InformationGain.highestGain(attributeEntropy); //outlook
 		
 		buildTree(structureFile, dataSet, highestGainAttributeRow, root, entropy);
@@ -32,10 +33,10 @@ public class Main {
 //		if(root.attributeToBeCompared.size() == structureFile.get(0).length)
 //			return;
 		
-		System.out.println("-----------");	
+//		System.out.println("-----------");	
 		double[] attributeEntropy = new double[structureFile.get(0).length - 1];
 		for(int targetAttributeIndex = 0; targetAttributeIndex < structureFile.get(highestGainAttributeRow + 1).length; targetAttributeIndex++){ //leafnode sunny overcast rainy
-			System.out.println(structureFile.get(highestGainAttributeRow + 1)[targetAttributeIndex] + ":");
+//			System.out.println(structureFile.get(highestGainAttributeRow + 1)[targetAttributeIndex] + ":");
 			for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1  ; attributeRow++){ // Outlook, Temperature, Humidity, Wind,...structureFile.get(0).length - 1
 				if(attributeRow != highestGainAttributeRow ){
 					if(root.attributeIndex.contains(attributeRow)){
@@ -46,13 +47,13 @@ public class Main {
 				}else{
 					attributeEntropy[attributeRow] = Double.MAX_VALUE; //outlook
 				}
-				System.out.println(structureFile.get(0)[attributeRow]+" "+attributeEntropy[attributeRow]);
+//				System.out.println(structureFile.get(0)[attributeRow]+" "+attributeEntropy[attributeRow]);
 			}
 			
-			if(InformationGain.highestGain(attributeEntropy) == -2)
-				System.out.println("Yes/No" + "\n");
-			else
-				System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy)] + root.attributeIndex + "\n");
+//			if(InformationGain.highestGain(attributeEntropy) == -2)
+//				System.out.println("Yes/No" + "\n");
+//			else
+//				System.out.println(structureFile.get(0)[InformationGain.highestGain(attributeEntropy)] + root.attributeIndex + "\n");
 			
 			List<String> currentAttributesToBeCompared = new ArrayList<String>();
 			currentAttributesToBeCompared.addAll(root.attributeToBeCompared);
@@ -60,17 +61,22 @@ public class Main {
 			
 			int informationGain = InformationGain.highestGain(attributeEntropy);
 			List<Integer> currentAttributeIndex = new ArrayList<Integer>();
+			List<String> currentAttributeIndexName = new ArrayList<String>();
 			if(InformationGain.highestGain(attributeEntropy) == -2){
 				//System.out.println(informationGain);
 				currentAttributeIndex.addAll(root.attributeIndex);
 				currentAttributeIndex.add(informationGain);
+				currentAttributeIndexName.addAll(root.attributeIndexName);
+				//currentAttributeIndexName.add(structureFile.get(0)[root.attributeIndex.get(informationGain)]);
 				//System.out.println(currentAttributeIndex);
-				root.addChild(new TreeNode(currentAttributeIndex, currentAttributesToBeCompared, "Yes/No"));
+				root.addChild(new TreeNode(currentAttributeIndex, currentAttributeIndexName, currentAttributesToBeCompared, "Yes/No"));
 				//System.out.println(currentAttributesToBeCompared);
 			}else{
 				currentAttributeIndex.addAll(root.attributeIndex);
 				currentAttributeIndex.add(informationGain);
-				root.addChild(new TreeNode(currentAttributeIndex, currentAttributesToBeCompared, structureFile.get(0)[informationGain]));	
+				currentAttributeIndexName.addAll(root.attributeIndexName);
+				currentAttributeIndexName.add(structureFile.get(0)[informationGain]);
+				root.addChild(new TreeNode(currentAttributeIndex, currentAttributeIndexName, currentAttributesToBeCompared, structureFile.get(0)[informationGain]));	
 				//System.out.println(currentAttributesToBeCompared);
 			}
 		}

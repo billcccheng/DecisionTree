@@ -3,7 +3,7 @@ import java.util.List;
 
 
 public class EntropyCalculation {
-	int numOfClassifier;
+	static double trainPortion = 0.9;
 	public double calculateAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow){
 		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
 		String[] attributes = structureFile.get(attributeRow + 1);
@@ -25,7 +25,7 @@ public class EntropyCalculation {
 	
 	private static double[][] countAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeRow){
 		double[][] count = new double[attributes.length][numOfClassifier];
-		for(int i = 0; i < dataSet.size(); i++){
+		for(int i = 0; i < dataSet.size() * trainPortion; i++){
 			for(int j = 0; j < attributes.length; j++){
 				for(int k = 0; k < numOfClassifier; k++){
 					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
@@ -102,7 +102,7 @@ public class EntropyCalculation {
 	
 	private static double[][] countSubAttributes(List<String[]>  dataSet, List<String[]> structureFile, int numOfClassifier, String[] attributes, int attributeRow, String leafNode, int highestGainAttributeRow, int targetAttributeIndex, TreeNode root){
 		double[][] countAttributesWithClassifier = new double[attributes.length][numOfClassifier];
-		for(int i = 0; i < dataSet.size(); i++){
+		for(int i = 0; i < dataSet.size() * trainPortion; i++){
 			for(int j = 0; j < attributes.length; j++){  //attributes = sunny,overcast,rainy  attributes = structureFile.get(attributeRow);
 				for(int k = 0; k < numOfClassifier; k++){
 					if(dataSet.get(i)[dataSet.get(i).length - 1].equals(structureFile.get(structureFile.size()-1)[k]) //PlayTennis = No/Yes
