@@ -1,8 +1,8 @@
 White_King_file,White_King_rank,White_Rook_file,White_Rook_rank,Black_King_file,Black_King_rank,class
 a,b,c,d,e,f,g,h
+1,2,3,4,5,6,7,8
 a,b,c,d,e,f,g,h
+1,2,3,4,5,6,7,8
 a,b,c,d,e,f,g,h
-a,b,c,d,e,f,g,h
-a,b,c,d,e,f,g,h
-a,b,c,d,e,f,g,h
+1,2,3,4,5,6,7,8
 draw,one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen

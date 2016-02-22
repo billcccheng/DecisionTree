@@ -20,61 +20,69 @@ public class TreeNode{
         children.add(child);
     }
     
-    public static void traverseTree(TreeNode root, List<String[]> structureFile, List<String[]> dataSet){
-    	//System.out.println("-------------");
+    public static void traverseTree(TreeNode root, List<String[]> structureFile, List<String[]> dataSet, int level){
     	if(root.children.isEmpty()){
-	    	for(int index = 0; index < root.attributeIndex.size(); index++){
-	    		if(root.attributeIndex.get(index) == -2){
-	    			for(int dataSetIndex = 0; dataSetIndex < dataSet.size(); dataSetIndex++){
-	    				boolean found = true;
-						for(int subIndex = 0; subIndex < root.attributeIndex.size(); subIndex++){
-	    					if(root.attributeIndex.get(subIndex) != -2){
-		    					if(dataSet.get(dataSetIndex)[root.attributeIndex.get(subIndex)].equals(root.attributeToBeCompared.get(subIndex))){
-		    						found = true;
-		    					}else{
-		    						found = false;
-		    						break;
-		    					}
-	    					}
-	    				}
-	    				if(found){
-	    					root.attributeIndexName.add(dataSet.get(dataSetIndex)[dataSet.get(dataSetIndex).length-1]);
-		    				break;
-	    				}
-	    			}
-	    		}else{
-	    			//root.attributeIndexName.add(structureFile.get(0)[root.attributeIndex.get(index)]);
-	    			//System.out.print(structureFile.get(0)[root.attributeIndex.get(index)] + "[" + root.attributeToBeCompared.get(index) + "]" +",");
-	    		}
-	    	}
-	    	
-	    	System.out.println(root.attributeIndexName);
-	    	System.out.println(root.attributeToBeCompared);
-	    	System.out.println();
+    		for(int i = 0; i < level; i++)
+    			System.out.print("   ");
+    		System.out.print(root.attributeName + " ");
+    		for(int dataSetIndex = 0; dataSetIndex < dataSet.size(); dataSetIndex++){
+				boolean found = true;
+				for(int index = 0; index < root.attributeIndex.size(); index++){
+					if(root.attributeIndex.get(index) != -2){
+    					if(dataSet.get(dataSetIndex)[root.attributeIndex.get(index)].equals(root.attributeToBeCompared.get(index))){
+    						found = true;
+    					}else{
+    						found = false;
+    						break;
+    					}
+					}
+				}
+				if(found){
+					root.attributeIndexName.add(dataSet.get(dataSetIndex)[dataSet.get(dataSetIndex).length-1]);
+    				break;
+				}
+			}
+    		for(String element : structureFile.get(structureFile.size() - 1)){
+		    	if(root.attributeIndexName.contains(element)){
+		    		//for(int i = 0; i < level; i++)
+		    		System.out.println(root.attributeIndexName.get(level) + " " + root.attributeToBeCompared);
+		    	}
+    		}
+    	}else{
+    		for(int i = 0; i < level; i++)
+    			System.out.print("   ");
+    		System.out.println(root.attributeName + " " + root.attributeToBeCompared );
     	}
-    	
-//    	System.out.println(root.attributeIndex);
-//    	if(root.children.isEmpty())
-//    		root.attributeToBeCompared.add("Yes/No");
-//    	System.out.println(root.attributeToBeCompared);
-
     	
     	for(int i = 0; i < root.children.size(); i++){
 			TreeNode currentNode = root.children.get(i);
 			if(currentNode.attributeIndex.get(currentNode.attributeIndex.size()-1) != -1){
-				traverseTree(currentNode, structureFile, dataSet);
+				traverseTree(currentNode, structureFile, dataSet, level+1);
 			}
     	}
     }
+    
+//    public static String getClassifier(TreeNode root, List<String[]> dataSet){
+//    	String attributeName = null;
+//    	System.out.println(root.attributeIndex + " " + root.attributeToBeCompared);
+//		for(int dataSetIndex = 0; dataSetIndex < dataSet.size(); dataSetIndex++){
+//			boolean found = true;
+//			if(root.attributeToBeCompared.size() > 0 && root.attributeIndex.size() > 0){
+//				for(int index = 0; index < root.attributeToBeCompared.size(); index++){
+//					if(dataSet.get(dataSetIndex)[root.attributeIndex.get(index)].equals(root.attributeToBeCompared.get(index))){
+//						found = true;
+//					}else{
+//						found = false;
+//						break;
+//					}	
+//				}
+//				if(found){
+//					attributeName = dataSet.get(dataSetIndex)[dataSet.get(dataSetIndex).length-1];
+//					break;
+//				}
+//			}
+//		}
+//		return "class =";
+//    }
 
 }
-
-
-//public class TreeNode {
-//	int val;
-//	TreeNode left;
-//	TreeNode right;
-//	TreeNode(int val){
-//		this.val = val; 
-//	}
-//}

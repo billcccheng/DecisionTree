@@ -14,7 +14,6 @@ public class ReadFile {
 	public static List<String[]> readData() throws IOException{
 		CSVReader reader = new CSVReader(new FileReader("data.txt"));
 	    List<String[]> myEntries = reader.readAll();
-	    Collections.shuffle(myEntries);
 	    reader.close();
 	    return myEntries;
 	}
