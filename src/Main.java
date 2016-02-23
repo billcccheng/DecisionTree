@@ -24,8 +24,14 @@ public class Main {
 		//System.out.println(structureFile.get(0)[highestGainAttributeRow]);
 		TreeNode root = new TreeNode(attributeIndexList, attributeIndexName,new ArrayList<String>(),structureFile.get(0)[highestGainAttributeRow]);
 		buildTree(structureFile, dataSet, highestGainAttributeRow, root, entropy);
-
-		TreeNode.traverseTree(root, structureFile, dataSet, 0);
+		
+		
+		List<List<String>> accuracyTestAttributeToBeCompared = new ArrayList<List<String>>();
+		List<List<Integer>> accuracyTestAttributeIndex = new ArrayList<List<Integer>>();
+		
+		TreeNode.traverseTree(root, structureFile, dataSet, 0, accuracyTestAttributeIndex, accuracyTestAttributeToBeCompared);
+		System.out.println("--------------------------------------------------------------------------------");
+		TreeNode.testAccuracy(root, structureFile, dataSet, accuracyTestAttributeIndex, accuracyTestAttributeToBeCompared);
 
 	}
 	
@@ -56,7 +62,7 @@ public class Main {
 				currentAttributeIndex.addAll(root.attributeIndex);
 				currentAttributeIndex.add(informationGain);
 				currentAttributeIndexName.addAll(root.attributeIndexName);
-				root.addChild(new TreeNode(currentAttributeIndex, currentAttributeIndexName, currentAttributesToBeCompared, "class ="));
+				root.addChild(new TreeNode(currentAttributeIndex, currentAttributeIndexName, currentAttributesToBeCompared, ""));
 			}else{
 				currentAttributeIndex.addAll(root.attributeIndex);
 				currentAttributeIndex.add(informationGain);
