@@ -20,7 +20,7 @@ public class ReadFile {
 	    for(int i = 0; i < myEntries.size(); i++){
 	    	for(int j = 0; j < myEntries.get(i).length - 1; j++){
 	    		if(myEntries.get(i)[j].equals("?")){
-	    			myEntries.get(i)[j] = structureFile.get(j+1)[(int)(Math.random()*structureFile.get(j+1).length)+1];
+	    			myEntries.get(i)[j] = structureFile.get(j+1)[(int)(Math.random()*structureFile.get(j+1).length)];
 	    		}
 	    	}
 	    }

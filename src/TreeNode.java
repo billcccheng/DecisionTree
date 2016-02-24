@@ -55,14 +55,14 @@ public class TreeNode{
     			/* Print out bottom leaves */
     			for(int i = 0; i < level; i++)
     				System.out.print("    ");
-    			System.out.println("class = "  + root.attributeName + " " + root.attributeIndex + " " + root.attributeToBeCompared);
+    			System.out.println("class = "  + root.attributeName + " " + root.attributeToBeCompared);
     		}
 
     	}else{
     		/* Print out leaves */
     		for(int i = 0; i < level; i++)
     			System.out.print("    ");
-    		System.out.println(root.attributeName + " " + root.attributeIndex + " " + root.attributeToBeCompared );
+    		System.out.println(root.attributeName + " " + root.attributeToBeCompared );
     	}
     	
     	for(int i = 0; i < root.children.size(); i++){
@@ -74,17 +74,16 @@ public class TreeNode{
     }
     
     
-    public static void testAccuracy(TreeNode root, List<String[]> structureFile, List<String[]> dataSet, List<List<Integer>> accuracyTestAttributeIndex, List<List<String>> accuracyTestAttributeToBeCompared){
+    public static double testAccuracy(TreeNode root, List<String[]> structureFile, List<String[]> dataSet, List<List<Integer>> accuracyTestAttributeIndex, List<List<String>> accuracyTestAttributeToBeCompared){
     	int correctAnswer = 0;
     	boolean equals = true; 
     	//root.children.remove(1);
-    	System.out.println(accuracyTestAttributeToBeCompared + " " + accuracyTestAttributeIndex);
-    	for(int i = (int) (0.9*dataSet.size()); i < dataSet.size(); i++){
+    	for(int i = 0; i < dataSet.size(); i++){
     		 // accuracyTestAttributeIndex.size() = accuracyTestAttributeToBeCompared.size()
     		for(int j = 0; j < accuracyTestAttributeIndex.size(); j++){  // [[sunny, high, no], [sunny, normal, yes]... => [sunny, high, no]
     			equals = true;
     			for(int k = 0; k < accuracyTestAttributeIndex.get(j).size(); k++){  // [sunny, high, no] => sunny..high..no
-    				if(accuracyTestAttributeIndex.get(j).get(k) != -2){ 
+    				if(accuracyTestAttributeIndex.get(j).get(k) != -2){
     					if(!dataSet.get(i)[accuracyTestAttributeIndex.get(j).get(k)].equals(accuracyTestAttributeToBeCompared.get(j).get(k))){
     						equals = false;
     						break;
@@ -102,7 +101,10 @@ public class TreeNode{
     		if(equals)
     			correctAnswer++;
     	}
-    	int dataSize = dataSet.size() - (int)(0.9*dataSet.size());
-    	System.out.println(correctAnswer + " / " + dataSize);
+    	int dataSize = dataSet.size();
+    	double accuracy = ((double)correctAnswer/dataSize);
+    	System.out.println(correctAnswer + " / " + dataSize + " = " + accuracy);
+    	
+    	return accuracy;
     }   
 }

@@ -6,33 +6,58 @@ public class Main {
 	public static void main(String[] args) throws IOException{
 		List<String[]> structureFile = ReadFile.readStructure();
 		List<String[]> dataSet = ReadFile.readData();
+		//List<String[]> trainingDataSet = new ArrayList<>();
+		List<String[]> testingDataSet = new ArrayList<>();
+		double[] accuracy = new double[10];
+		int count = 0;
+		for(int i = 0; i < dataSet.size() - dataSet.size()/10; i+=dataSet.size()/10){
+			List<String[]> trainingDataSet = new ArrayList<>();
+			trainingDataSet.addAll(dataSet);
+			testingDataSet = dataSet.subList(i, i + dataSet.size()/10);
+			for(int j = i; j < i + dataSet.size()/10; j++){
+				if(trainingDataSet.size() >= j)
+				trainingDataSet.remove(i);
+			}
 		
+			EntropyCalculation entropy = new EntropyCalculation();
+			double[] attributeEntropy = new double[structureFile.get(0).length - 1];
+			for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1; attributeRow++) // Outlook, Temperature, Humidity, Wind,...
+				attributeEntropy[attributeRow] = entropy.calculateAttributeEntropy(trainingDataSet, structureFile, attributeRow); 
+			
+			List<Integer> attributeIndexList = new ArrayList<Integer>();
+			List<String> attributeIndexName = new ArrayList<String>();
+			
+			int highestGainAttributeRow = InformationGain.highestGain(attributeEntropy); //outlook
+			
+			attributeIndexList.add(highestGainAttributeRow); 
+			attributeIndexName.add(structureFile.get(0)[highestGainAttributeRow]);
+			//System.out.println(structureFile.get(0)[highestGainAttributeRow]);
+			TreeNode root = new TreeNode(attributeIndexList, attributeIndexName,new ArrayList<String>(),structureFile.get(0)[highestGainAttributeRow]);
+			buildTree(structureFile, trainingDataSet, highestGainAttributeRow, root, entropy);
+			
+			
+			List<List<String>> accuracyTestAttributeToBeCompared = new ArrayList<List<String>>();
+			List<List<Integer>> accuracyTestAttributeIndex = new ArrayList<List<Integer>>();
+			
+			TreeNode.traverseTree(root, structureFile, trainingDataSet, 0, accuracyTestAttributeIndex, accuracyTestAttributeToBeCompared);
+			System.out.println("--------------------------------------------------------------------------------");
+			accuracy[count++] = TreeNode.testAccuracy(root, structureFile, testingDataSet, accuracyTestAttributeIndex, accuracyTestAttributeToBeCompared);
+			
+		}
 		
-		EntropyCalculation entropy = new EntropyCalculation();
-		//double S = entropy.calculateEntropy_S(dataSet, structureFile);
-		double[] attributeEntropy = new double[structureFile.get(0).length - 1];
-		for(int attributeRow = 0; attributeRow < structureFile.get(0).length - 1; attributeRow++) // Outlook, Temperature, Humidity, Wind,...
-			attributeEntropy[attributeRow] = entropy.calculateAttributeEntropy(dataSet, structureFile, attributeRow); 
+		double total = 0;
+		double standardDeviation;
+		double squareValue = 0;
+		double average = 0;
+		for(int i = 0; i < 10; i++){
+			total += accuracy[i];
+			squareValue += accuracy[i] * accuracy[i];
+		}
+		average = total/10;
+		standardDeviation = Math.sqrt(squareValue - 10*average*average);
+		System.out.println("Std Deviation: " + standardDeviation);
+		System.out.println("95% C.I.:(" + (average - 1.96*standardDeviation/Math.sqrt(10)) + ", " + (average + 1.96*standardDeviation/Math.sqrt(10)) + ")");
 		
-		List<Integer> attributeIndexList = new ArrayList<Integer>();
-		List<String> attributeIndexName = new ArrayList<String>();
-		
-		int highestGainAttributeRow = InformationGain.highestGain(attributeEntropy); //outlook
-		
-		attributeIndexList.add(highestGainAttributeRow); 
-		attributeIndexName.add(structureFile.get(0)[highestGainAttributeRow]);
-		//System.out.println(structureFile.get(0)[highestGainAttributeRow]);
-		TreeNode root = new TreeNode(attributeIndexList, attributeIndexName,new ArrayList<String>(),structureFile.get(0)[highestGainAttributeRow]);
-		buildTree(structureFile, dataSet, highestGainAttributeRow, root, entropy);
-		
-		
-		List<List<String>> accuracyTestAttributeToBeCompared = new ArrayList<List<String>>();
-		List<List<Integer>> accuracyTestAttributeIndex = new ArrayList<List<Integer>>();
-		
-		TreeNode.traverseTree(root, structureFile, dataSet, 0, accuracyTestAttributeIndex, accuracyTestAttributeToBeCompared);
-		System.out.println("--------------------------------------------------------------------------------");
-		TreeNode.testAccuracy(root, structureFile, dataSet, accuracyTestAttributeIndex, accuracyTestAttributeToBeCompared);
-
 	}
 	
 	public static void buildTree(List<String[]> structureFile, List<String[]> dataSet, int highestGainAttributeRow, TreeNode root, EntropyCalculation entropy){

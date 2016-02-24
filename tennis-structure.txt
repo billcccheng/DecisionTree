@@ -1,0 +1,6 @@
+outlook,temperature,humidity,wind,playtennis
+sunny,overcast,rainy
+hot,mild,cool
+high,normal
+strong,weak
+yes,no

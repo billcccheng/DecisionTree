@@ -3,7 +3,7 @@ import java.util.List;
 
 
 public class EntropyCalculation {
-	static double trainPortion = 0.6;
+	static double trainPortion = 1;
 	public double calculateAttributeEntropy(List<String[]>  dataSet, List<String[]> structureFile, int attributeRow){
 		int numOfClassifier = structureFile.get(structureFile.size()-1).length;
 		String[] attributes = structureFile.get(attributeRow + 1);
