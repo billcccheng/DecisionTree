@@ -1,4 +1,4 @@
-buying,maint,doors,persons,lug_boot,safety
+buying,maint,doors,persons,lug_boot,safety,class
 vhigh,high,med,low
 vhigh,high,med,low
 2,3,4,5more
