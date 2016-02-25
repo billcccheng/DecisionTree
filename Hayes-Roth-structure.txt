@@ -1,0 +1,6 @@
+hobby,age,educational_level,marital_status,class
+1,2,3
+1,2,3,4
+1,2,3,4
+1,2,3,4
+1,2,3
